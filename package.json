@@ -15,10 +15,14 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
+    "joi": "^17.6.0",
     "pg": "^8.7.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.0",
     "nodemon": "^2.0.15"
   }
