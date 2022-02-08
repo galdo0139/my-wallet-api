@@ -1,18 +1,19 @@
 import { connection } from '../../databaseConnection.js';
 
-async function create(name, username, password) {
-    await connection.query(
-        'insert into users (name, username, password) values($1, $2, $3)',
-        [name, username, password],
-    );
-}
+const userRepository = {
+    async create(name, username, password) {
+        const result = await connection.query(
+            'insert into users (name, username, password) values($1, $2, $3)',
+            [name, username, password],
+        );
 
-async function findByUsername(username) {
-    const user = await connection.query('select * from users where username = $1', [username]);
-    return user.rows[0] || null;
-}
+        return result.rowCount >= 1;
+    },
 
-export {
-    create,
-    findByUsername,
+    async findByUsername(username) {
+        const user = await connection.query('select * from users where username = $1', [username]);
+        return user.rows[0] || null;
+    },
 };
+
+export default userRepository;

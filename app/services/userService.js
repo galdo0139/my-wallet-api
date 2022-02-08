@@ -1,23 +1,23 @@
 import bcrypt from 'bcrypt';
 import DuplicatedError from '../Errors/DuplicatedError.js';
-import * as userRepository from '../repositories/userRepository.js';
+import userRepository from '../repositories/userRepository.js';
 
-async function registerUser(fields) {
-    const { name, username, password } = fields;
+const userService = {
+    async registerUser(user) {
+        const { name, username, password } = user;
 
-    if (await usernameAlreadyExist(username)) {
-        throw new DuplicatedError({ message: 'This user already exists' });
-    }
+        if (await this.usernameAlreadyExist(username)) {
+            throw new DuplicatedError({ message: 'This user already exists' });
+        }
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    userRepository.create(name, username, hashedPassword);
-}
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        userRepository.create(name, username, hashedPassword);
+    },
 
-async function usernameAlreadyExist(username) {
-    const user = await userRepository.findByUsername(username);
-    return !!user;
-}
-
-export {
-    registerUser,
+    async usernameAlreadyExist(username) {
+        const user = await userRepository.findByUsername(username);
+        return !!user;
+    },
 };
+
+export default userService;
