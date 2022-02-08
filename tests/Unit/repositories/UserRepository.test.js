@@ -1,9 +1,9 @@
 import userRepository from '../../../app/repositories/userRepository';
 import { connection } from '../../../databaseConnection';
 import { createUser } from '../../factories/userFactory';
-import { simpleQueryMock } from '../../mocks/libs/databaseMock';
+import { selectQueryMock, simpleQueryMock } from '../../mocks/libs/databaseMock';
 
-describe('User repository', () => {
+describe('User repository - create', () => {
     it('should sucessfully create a user', async () => {
         const user = createUser();
 
@@ -22,5 +22,16 @@ describe('User repository', () => {
         await expect(userRepository.create(user.name, user.username, user.password))
             .rejects
             .toThrow('Simulating a database query error');
+    });
+});
+
+describe('User repository - findByUsername', () => {
+    it('should find user by its username', async () => {
+        jest.spyOn(connection, 'query').mockImplementation(selectQueryMock);
+
+        const user = await userRepository.findByUsername('username');
+        expect(user).toEqual(
+            expect.objectContaining({ id: 1 }),
+        );
     });
 });
