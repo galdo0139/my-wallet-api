@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start:prod": "NODE_ENV=prod npx nodemon server.js",
+    "start": "NODE_ENV=prod npx nodemon server.js",
     "start:dev": "NODE_ENV=dev npx nodemon server.js",
     "test": "jest --detectOpenHandles",
     "test:unit": "jest unit --verbose --detectOpenHandles"
