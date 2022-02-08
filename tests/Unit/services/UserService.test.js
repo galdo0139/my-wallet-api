@@ -3,26 +3,33 @@ import userRepository from '../../../app/repositories/userRepository';
 import userService from '../../../app/services/userService';
 import { createUser } from '../../factories/userFactory';
 import { passwordHashMock } from '../../mocks/libs/bcryptMock';
-import { createUserMock } from '../../mocks/repositories/userRepositoryMock';
-import { unusedUsernameMock } from '../../mocks/services/userServiceMock';
+import { createUserMock, userFoundedByUsernameMock, userNotFoundedByUsernameMock } from '../../mocks/repositories/userRepositoryMock';
+import { unusedUsernameMock, existingUsernameMock } from '../../mocks/services/userServiceMock';
+
+describe('User service - usernameAlreadyExist', () => {
+    it('should return true if username already exists', async () => {
+        jest.spyOn(userRepository, 'findByUsername').mockImplementation(userFoundedByUsernameMock);
+        const user = createUser();
+        await expect(userService.usernameAlreadyExist(user.username)).resolves.toBe(true);
+    });
+
+    it("should return false if username doesn't exist", async () => {
+        jest.spyOn(userRepository, 'findByUsername').mockImplementation(userNotFoundedByUsernameMock);
+
+        const user = createUser();
+        const r = await userService.usernameAlreadyExist(user.username);
+        console.log('agora', r);
+        expect(r).toBe(false);
+    });
+});
 
 describe('User service - registerUser', () => {
     it('should sucessfully register a user', async () => {
-        const user = createUser();
-
         jest.spyOn(userService, 'usernameAlreadyExist').mockImplementation(unusedUsernameMock);
-
-        // jest.mock('../../../app/services/userService', () => ({
-        //     usernameAlreadyExist: jest.fun().mockImplementation((() => false)),
-        // }));
-
         jest.spyOn(bcrypt, 'hashSync').mockImplementation(passwordHashMock);
-
         jest.spyOn(userRepository, 'create').mockImplementation(createUserMock);
 
-        // usernameAlreadyExist(username)
-        // bcrypt.hashSync(password, 10);
-        // userRepository.create(name, username, hashedPassword);
+        const user = createUser();
 
         await expect(userService.registerUser(user))
             .resolves
@@ -30,20 +37,15 @@ describe('User service - registerUser', () => {
             .toThrow('Invalid data receveid');
     });
 
-    // it('should throw an error when username already exists', async () => {
-    //     const user = createUser();
-    //     user.name = '';
+    it('should throw an error when username already exists', async () => {
+        jest.spyOn(userService, 'usernameAlreadyExist').mockImplementation(existingUsernameMock);
+        jest.spyOn(bcrypt, 'hashSync').mockImplementation(passwordHashMock);
+        jest.spyOn(userRepository, 'create').mockImplementation(createUserMock);
 
-    //     jest.spyOn(connection, 'query').mockImplementation(createUserMock);
+        const user = createUser();
 
-    //     await expect(create(user.name, user.username, user.password))
-    //         .rejects
-    //         .toThrow('Simulating a database query error');
-    // });
+        await expect(userService.registerUser(user))
+            .rejects
+            .toThrow('This user already exists');
+    });
 });
-
-// describe('User service - usernameAlreadyExist', () => {
-//     it('should return true if username already exists', async () => {
-
-//     });
-// });
