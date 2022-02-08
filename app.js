@@ -1,3 +1,4 @@
+import './config/enviromentSetup.js';
 import Express from 'express';
 import router from './routes/api.js';
 
