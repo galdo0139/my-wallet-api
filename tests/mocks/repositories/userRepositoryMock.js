@@ -1,4 +1,4 @@
-import { empty } from '../../../helpers';
+import { empty } from '../../../app/helpers/helpers';
 
 async function createUserMock(name, username, password) {
     if (empty(name) || empty(username) || empty(password)) {

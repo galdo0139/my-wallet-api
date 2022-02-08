@@ -18,7 +18,6 @@ describe('User service - usernameAlreadyExist', () => {
 
         const user = createUser();
         const r = await userService.usernameAlreadyExist(user.username);
-        console.log('agora', r);
         expect(r).toBe(false);
     });
 });

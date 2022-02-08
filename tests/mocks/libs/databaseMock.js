@@ -1,4 +1,4 @@
-import { empty } from '../../../helpers';
+import { empty } from '../../../app/helpers/helpers';
 import InvalidArgsTestError from '../../Errors/Database/InvalidArgsTestError';
 import InvalidQueryTestError from '../../Errors/Database/InvalidQueryTestError';
 

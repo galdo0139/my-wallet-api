@@ -1,5 +1,3 @@
-// import DatabaseTestError from '../../../app/Errors/DatabaseTestError';
-
 async function existingUsernameMock() {
     return true;
 }

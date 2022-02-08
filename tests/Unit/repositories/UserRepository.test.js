@@ -1,5 +1,5 @@
 import userRepository from '../../../app/repositories/userRepository';
-import { connection } from '../../../databaseConnection';
+import { connection } from '../../../config/databaseConnection';
 import { createUser } from '../../factories/userFactory';
 import { selectQueryMock, simpleQueryMock } from '../../mocks/libs/databaseMock';
 

@@ -1,4 +1,4 @@
-import { connection } from '../../databaseConnection.js';
+import { connection } from '../../config/databaseConnection.js';
 
 const userRepository = {
     async create(name, username, password) {
