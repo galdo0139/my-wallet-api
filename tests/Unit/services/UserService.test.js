@@ -19,8 +19,7 @@ describe('User service - usernameAlreadyExist', () => {
         jest.spyOn(userRepository, 'findByUsername').mockImplementation(userNotFoundedByUsernameMock);
 
         const user = createUser();
-        const r = await userService.usernameAlreadyExist(user.username);
-        expect(r).toBe(false);
+        await expect(userService.usernameAlreadyExist(user.username)).resolves.toBe(false);
     });
 });
 
