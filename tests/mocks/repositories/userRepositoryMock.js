@@ -1,4 +1,5 @@
 import { empty } from '../../../app/helpers/helpers';
+import { createUser } from '../../factories/userFactory';
 
 async function createUserMock(name, username, password) {
     if (empty(name) || empty(username) || empty(password)) {
@@ -8,7 +9,8 @@ async function createUserMock(name, username, password) {
 }
 
 async function userFoundedByUsernameMock(username) {
-    return { id: 1, username };
+    const user = createUser();
+    return { id: 1, username, name: user.name };
 }
 
 async function userNotFoundedByUsernameMock() {

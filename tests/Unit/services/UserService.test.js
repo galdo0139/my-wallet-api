@@ -1,8 +1,10 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import userRepository from '../../../app/repositories/userRepository';
 import userService from '../../../app/services/userService';
 import { createUser } from '../../factories/userFactory';
-import { passwordHashMock } from '../../mocks/libs/bcryptMock';
+import { compareInvalidPasswordMock, compareValidPasswordMock, passwordHashMock } from '../../mocks/libs/bcryptMock';
+import { signMock } from '../../mocks/libs/jwtMock';
 import { createUserMock, userFoundedByUsernameMock, userNotFoundedByUsernameMock } from '../../mocks/repositories/userRepositoryMock';
 import { unusedUsernameMock, existingUsernameMock } from '../../mocks/services/userServiceMock';
 
@@ -46,5 +48,57 @@ describe('User service - registerUser', () => {
         await expect(userService.registerUser(user))
             .rejects
             .toThrow('This user already exists');
+    });
+});
+
+describe('User service - signIn', () => {
+    it('should return a token when using valid credentials ', async () => {
+        jest.spyOn(bcrypt, 'compareSync').mockImplementation(compareValidPasswordMock);
+        jest.spyOn(jwt, 'sign').mockImplementation(signMock);
+        jest.spyOn(userRepository, 'findByUsername').mockImplementation(userFoundedByUsernameMock);
+
+        const user = createUser();
+        const auth = await userService.anthenticateUser(user);
+
+        expect(auth).toEqual(
+            expect.objectContaining({ username: user.username }),
+        );
+    });
+
+    it('should sucessfully athenticate a user when using valid credentials', async () => {
+        jest.spyOn(bcrypt, 'compareSync').mockImplementation(compareValidPasswordMock);
+        jest.spyOn(jwt, 'sign').mockImplementation(signMock);
+        jest.spyOn(userRepository, 'findByUsername').mockImplementation(userFoundedByUsernameMock);
+
+        const user = createUser();
+
+        await expect(userService.anthenticateUser(user))
+            .resolves
+            .not
+            .toThrow('The username or password provided are incorrect');
+    });
+
+    it('should throw an error when using a invalid username', async () => {
+        jest.spyOn(bcrypt, 'compareSync').mockImplementation(compareValidPasswordMock);
+        jest.spyOn(jwt, 'sign').mockImplementation(signMock);
+        jest.spyOn(userRepository, 'findByUsername').mockImplementation(userNotFoundedByUsernameMock);
+
+        const user = createUser();
+
+        await expect(userService.anthenticateUser(user))
+            .rejects
+            .toThrow('The username or password provided are incorrect');
+    });
+
+    it('should throw an error when using a invalid password', async () => {
+        jest.spyOn(bcrypt, 'compareSync').mockImplementation(compareInvalidPasswordMock);
+        jest.spyOn(jwt, 'sign').mockImplementation(signMock);
+        jest.spyOn(userRepository, 'findByUsername').mockImplementation(userFoundedByUsernameMock);
+
+        const user = createUser();
+
+        await expect(userService.anthenticateUser(user))
+            .rejects
+            .toThrow('The username or password provided are incorrect');
     });
 });

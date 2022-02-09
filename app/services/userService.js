@@ -20,7 +20,7 @@ const userService = {
         const user = await userRepository.findByUsername(username);
 
         if (!user) {
-            throw new InvalidCredentialsError();
+            throw new InvalidCredentialsError({});
         }
 
         if (bcrypt.compareSync(password, user.password)) {
@@ -34,7 +34,7 @@ const userService = {
             };
         }
 
-        throw new InvalidCredentialsError();
+        throw new InvalidCredentialsError({});
     },
 
     async usernameAlreadyExist(username) {
