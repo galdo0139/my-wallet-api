@@ -7,8 +7,9 @@
   "scripts": {
     "start": "NODE_ENV=prod npx nodemon server.js",
     "start:dev": "NODE_ENV=dev npx nodemon server.js",
-    "test": "NODE_ENV=prod jest --detectOpenHandles",
-    "test:unit": "NODE_ENV=prod jest unit --verbose --detectOpenHandles"
+    "test": "NODE_ENV=test jest --verbose --detectOpenHandles",
+    "test:unit": "NODE_ENV=test jest unit --verbose --detectOpenHandles",
+    "test:integration": "NODE_ENV=test jest integration --verbose --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

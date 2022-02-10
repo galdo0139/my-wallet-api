@@ -12,11 +12,18 @@ function createUser() {
     return user;
 }
 
-function registerUser() {
-    // user
+function createInvalidUser() {
+    const user = {
+        name: casual.name,
+        username: casual.username,
+        password: casual.password,
+        password_confirmation: casual.password,
+    };
+
+    return user;
 }
 
 export {
     createUser,
-    registerUser,
+    createInvalidUser,
 };
